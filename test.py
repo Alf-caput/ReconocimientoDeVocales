@@ -1,3 +1,2 @@
-import cv2
-while True:
-    print(cv2.waitKey(1) is ord('a'))
+from collections import namedtuple
+Rectangle2D = namedtuple('Rectangle2D', ('x1', 'y1', 'x2', 'y2'))
