@@ -8,8 +8,8 @@ def main():
     mouth_detector = cv2.CascadeClassifier(r'haar_tools/mouth.xml')
 
     # Video source
-    webcam = cv2.VideoCapture(0)
-    while webcam.isOpened() and cv2.waitKey(1) not in (ord('s'), ord('S')):  # Will 's' or 'S' not pressed
+    webcam = cv2.VideoCapture(r'videos/vocales0003.mp4')
+    while webcam.isOpened() and cv2.waitKey(1) not in (ord('s'), ord('S')):  # While 's' or 'S' not pressed
         # Webcam success on reading, webcam capture
         read_successfully, main_frame = webcam.read()
 
@@ -19,17 +19,17 @@ def main():
             processed_frame = cv2.blur(processed_frame, (10, 10))
 
             # Faces inside processed_frame
-            faces = face_detector.detectMultiScale(processed_frame, minNeighbors=3)
+            faces = face_detector.detectMultiScale(processed_frame, minNeighbors=5)
 
             # faces is a np.array of np.arrays with x, y, w, h of each face found inside processed_frame
             for x1, y1, w1, h1 in faces:
                 # Slices for readability
                 face_ypx, face_xpx = slice(y1, y1 + h1 + h1 // 5), slice(x1, x1 + w1)  # We add 1 // 5
-                y_third_ypx, x_xpx = slice(2 * h1 // 3, h1 + h1 // 5), slice(0, w1)  # Not exactly 1 // 3
+                y_third_ypx, x_xpx = slice(2 * h1 // 3, h1), slice(0, w1)  # Not exactly 1 // 3
 
                 # Face rectangle
                 cv2.rectangle(main_frame,
-                              (x1, y1), (x1 + w1, y1 + h1 + h1 // 5),
+                              (x1, y1), (x1 + w1, y1 + h1),
                               (255, 0, 0), 4)
 
                 # Line 2 // 3 face (start point to check for mouth)
@@ -56,7 +56,7 @@ def main():
                     cv2.rectangle(main_frame[face_ypx, face_xpx][y_third_ypx, x_xpx],
                                   (x2, y2), (x2 + w2, y2 + h2),
                                   (0, 0, 255), 4)
-                    
+
                     cv2.imshow('Boca', mouth_frame)
 
             cv2.imshow('Captura', main_frame)
